@@ -218,3 +218,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local code proposals are isolated from the tracked project files.
+sandbox/
