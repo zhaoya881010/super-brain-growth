@@ -1,21 +1,15 @@
-# Super Brain Growth MVP
+# Super Brain Growth
 
-This project is a minimal self-growing AI brain starter. It is made to be intentionally safe and reviewable.
+A small, reviewable starter for a system that can learn from open-source projects and grow through tested, human-reviewed changes.
 
 ## What it does
 
-- Tracks skills that are available to the system
-- Tracks growth tasks and approval status
-- Exposes a minimal REST API for adding skills and tasks
-- Stores candidate growth ideas sourced from GitHub/knowledge projects
-- Provides a very small dashboard to view system state
-
-## Architecture
-
-- `app.py`: FastAPI app and REST endpoints
-- `data/skills.json`: verified or proposed skills
-- `data/tasks.json`: growth tasks and work in progress
-- `requirements.txt`: app dependencies
+- Tracks skills that are available to the system.
+- Tracks growth tasks and approval status.
+- Lets you register public GitHub repos by URL.
+- Fetches public metadata + README excerpt for those repos.
+- Converts promising repo observations into reviewable improvement tasks.
+- Keeps a clear safety boundary: it does not clone, execute, or modify upstream source code.
 
 ## Run locally
 
@@ -23,43 +17,33 @@ This project is a minimal self-growing AI brain starter. It is made to be intent
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
+uvicorn app:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Then open:
+Open:
+- http://127.0.0.1:8000/
+- http://127.0.0.1:8000/docs
 
-- http://localhost:8000/
-- http://localhost:8000/docs
-
-## Example requests
+## Example: register a public GitHub repo
 
 ```bash
-curl http://localhost:8000/api/skills
-curl -X POST http://localhost:8000/api/skills \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "repo-researcher",
-    "description": "Find relevant GitHub repositories and summarize their fit for a task.",
-    "source_url": "https://github.com/search?q=github+repo+search",
-    "status": "proposed",
-    "tags": ["github", "research"]
-  }'
+curl -X POST http://127.0.0.1:8000/api/repos \
+  -H 'Content-Type: application/json' \
+  -d '{"url":"https://github.com/langchain-ai/langgraph","purpose":"Study agent workflow patterns"}'
 ```
 
-## Growth model
+## Safety model
 
-The system is designed to encourage a safe growth loop:
+This version intentionally does not clone or execute code from third-party repos. It only reads public metadata and README content through the GitHub API. Improvement tasks remain proposals until you review and implement them in your own branch.
 
-1. Observe a gap or idea.
-2. Turn it into a growth task.
-3. Gather source links and candidate project references.
-4. Validate the skill or capability in a controlled way.
-5. Approve only after review.
-6. Preserve a trail of changes and decisions.
+## Structure
 
-## Future extensions
+- `app.py`: API and UI entrypoint
+- `data/skills.json`: candidate skills
+- `data/tasks.json`: growth tasks
+- `data/repos.json`: registered GitHub sources
 
-- Add a real UI with cards and filters.
-- Add an approval workflow with GitHub PRs.
-- Integrate with GitHub API for repo discovery.
-- Expand to real memory, tool adapters, and skills engine.
+## Next stage
+
+The next safe step is to add a sandboxed agent that can propose code changes to this project itself, run tests in isolation, and create a PR for review. It should never execute untrusted third-party code without approval and a sandbox boundary.
+
