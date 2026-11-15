@@ -1,0 +1,18 @@
+[
+  {
+    "id": "task-1",
+    "title": "Build a dashboard for growth tracking",
+    "description": "Expose skills, growth tasks, and approval state in a small dashboard so the system can grow safely.",
+    "status": "in_progress",
+    "source_url": "https://github.com/vercel/next.js",
+    "capability": "ui"
+  },
+  {
+    "id": "task-2",
+    "title": "Add learning loop from GitHub source to skill",
+    "description": "Convert a candidate capability into a reviewed skill after validation and approval.",
+    "status": "proposed",
+    "source_url": "https://github.com/anthropics/skills",
+    "capability": "growth"
+  }
+]
